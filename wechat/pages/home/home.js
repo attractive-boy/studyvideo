@@ -9,6 +9,7 @@ Page({
   data: {
     imgSrcs: [],
     education_levels: [],
+    subjects: [],
     goodsList: [],
     goodsListLoadStatus: 0,
     pageLoading: false,
@@ -29,10 +30,6 @@ Page({
     num: 20,
   },
 
-  privateData: {
-    tabIndex: 0,
-  },
-
   onShow() {
     this.getTabBar().init();
   },
@@ -43,7 +40,7 @@ Page({
 
   onReachBottom() {
     if (this.data.goodsListLoadStatus === 0) {
-      this.loadGoodsList();
+
     }
   },
 
@@ -67,55 +64,30 @@ Page({
     this.setData({
       imgSrcs: genSwiperImageList()
     })
+    const that = this;
     request('/course/education_levels', 'GET').then((res) => {
-      this.setData({
+      that.setData({
         education_levels: res,
-        pageLoading: false,
       });
-      this.loadGoodsList(true);
+      that.getSubjects('初中');
     })
   },
 
   tabChangeHandle(e) {
-    this.privateData.tabIndex = e.detail;
-    this.loadGoodsList(true);
+    console.log("e===>", e)
+    this.getSubjects(e.detail.value);
+  },
+  getSubjects(educationLevel) {
+    request(`/course/subjects?education_level=${educationLevel}`, 'GET').then((res) => {
+      this.setData({
+        subjects: res,
+        pageLoading: false,
+      });
+    })
   },
 
   onReTry() {
-    this.loadGoodsList();
-  },
 
-  async loadGoodsList(fresh = false) {
-    if (fresh) {
-      wx.pageScrollTo({
-        scrollTop: 0,
-      });
-    }
-
-    this.setData({
-      goodsListLoadStatus: 1
-    });
-
-    const pageSize = this.goodListPagination.num;
-    let pageIndex = this.privateData.tabIndex * pageSize + this.goodListPagination.index + 1;
-    if (fresh) {
-      pageIndex = 0;
-    }
-
-    try {
-      const nextList = await fetchGoodsList(pageIndex, pageSize);
-      this.setData({
-        goodsList: fresh ? nextList : this.data.goodsList.concat(nextList),
-        goodsListLoadStatus: 0,
-      });
-
-      this.goodListPagination.index = pageIndex;
-      this.goodListPagination.num = pageSize;
-    } catch (err) {
-      this.setData({
-        goodsListLoadStatus: 3
-      });
-    }
   },
 
   goodListClickHandle(e) {
