@@ -1,4 +1,3 @@
-import { fetchUserCenter } from '../../services/usercenter/fetchUsercenter';
 import Toast from 'tdesign-miniprogram/toast/index';
 
 const menuData = [
@@ -108,41 +107,8 @@ Page({
   },
 
   init() {
-    this.fetUseriInfoHandle();
   },
 
-  fetUseriInfoHandle() {
-    fetchUserCenter().then(
-      ({
-        userInfo,
-        countsData,
-        orderTagInfos: orderInfo,
-        customerServiceInfo,
-      }) => {
-        // eslint-disable-next-line no-unused-expressions
-        menuData?.[0].forEach((v) => {
-          countsData.forEach((counts) => {
-            if (counts.type === v.type) {
-              // eslint-disable-next-line no-param-reassign
-              v.tit = counts.num;
-            }
-          });
-        });
-        const info = orderTagInfos.map((v, index) => ({
-          ...v,
-          ...orderInfo[index],
-        }));
-        this.setData({
-          userInfo,
-          menuData,
-          orderTagInfos: info,
-          customerServiceInfo,
-          currAuthStep: 2,
-        });
-        wx.stopPullDownRefresh();
-      },
-    );
-  },
 
   onClickCell({ currentTarget }) {
     const { type } = currentTarget.dataset;
