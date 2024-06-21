@@ -5,7 +5,6 @@ from config import Config
 import oss2
 import json
 from aliyunsdkcore.client import AcsClient
-from aliyunsdkvod.request.v20170321.GetVideoInfoRequest import GetVideoInfoRequest
 
 bp = Blueprint('course', __name__)
 
