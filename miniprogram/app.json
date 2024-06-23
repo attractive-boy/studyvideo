@@ -3,7 +3,8 @@
     "pages/home/home",
     "pages/index/index",
     "pages/logs/logs",
-    "pages/play/play"
+    "pages/play/play",
+    "pages/usercenter/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -22,7 +23,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/usercenter/index",
         "text": "我的"
       }
     ]

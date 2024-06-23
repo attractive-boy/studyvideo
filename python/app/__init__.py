@@ -12,8 +12,9 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     with app.app_context():
-        from .routes import course_routes
+        from .routes import course_routes,user_routes
         app.register_blueprint(course_routes.bp,url_prefix='/api/course')
+        app.register_blueprint(user_routes.bp,url_prefix='/api/user')
         db.create_all()
 
     return app
