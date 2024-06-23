@@ -15,6 +15,14 @@ class Course(db.Model):
         self.subject = subject
         self.oss_file_name = oss_file_name
     
+    def to_dict( self ):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'education_level': self.education_level,
+            'subject': self.subject,
+            'oss_file_name': self.oss_file_name
+        }
     # 获取某个 education_level subject 的所有课程
     def get_all_courses_by_education_level_and_subject(education_level, subject):
         return Course.query.filter_by(education_level=education_level, subject=subject).all()
