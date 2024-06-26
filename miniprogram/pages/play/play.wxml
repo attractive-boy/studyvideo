@@ -1,2 +1,9 @@
-<!--pages/play/play.wxml-->
-<text>pages/play/play.wxml</text>
+<view class="play-container">
+  <video id="myVideo" class="video" src="{{videoSrc}}" binderror="videoErrorCallback" controls></video>
+  <t-tabs defaultValue="{{0}}" space-evenly="{{false}}" t-class="custom-tabs">
+    <t-tab-panel label="介绍" value="0" >
+    <text class="introduct">{{course.name}}</text>
+    </t-tab-panel>
+  </t-tabs>
+  
+</view>

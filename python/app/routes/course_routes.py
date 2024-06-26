@@ -1,12 +1,16 @@
 from flask import Blueprint, jsonify, request
+import jwt
 from app.models.course_category import CourseCategory
 from app.models.course import Course
+from app.models.user import User
+from app.routes.user_routes import get_user
 from config import Config
 import oss2
 import json
 from aliyunsdkcore.client import AcsClient
 
 bp = Blueprint('course', __name__)
+SECRET_KEY = Config.access_key_secret
 
 # 获取所有教育等级
 @bp.route('/education_levels', methods=['GET'])
@@ -63,5 +67,72 @@ def get_courses_by_education_level_and_subject():
     if not education_level or not subject:
         return jsonify({'error': 'education_level and subject are required'}), 400
     
-    courses = Course.get_all_courses_by_education_level_and_subject(education_level, subject)
+    # courses = Course.get_all_courses_by_education_level_and_subject(education_level, subject)
+    #只获取被授权的
+    token = request.headers.get('Authorization')
+    payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    user_id = payload['openId']
+    user = User.query.filter_by(open_id=user_id).first()
+    if not user:
+        return jsonify({'error': '用户未登录'}), 401
+    if user.role == 'admin':
+        courses = Course.get_all_courses_by_education_level_and_subject(education_level, subject)
+    else:
+        courses = Course.get_all_authorized_courses_by_education_level_and_subject(education_level, subject, user)
     return jsonify([course.to_dict() for course in courses])
+
+# 获取所有有权限的课程
+@bp.route('/authorized_courses', methods=['GET'])
+def get_authorized_courses():
+    # 根据token 获取唯一id
+    token = request.headers.get('Authorization')
+    payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    user_id = payload['openId']
+    user = User.query.filter_by(open_id=user_id).first()
+    if not user:
+        return jsonify({'error': '用户未登录'}), 401
+
+    # 如果角色是管理者，则返回所有课程
+    if user.role == 'admin':
+        courses = Course.get_all_courses()
+        return jsonify([course.to_dict() for course in courses])
+    courses = Course.get_all_authorized_courses(user.id)
+    return jsonify([course.to_dict() for course in courses])
+
+#根据id获取课程
+@bp.route('/course/<int:course_id>', methods=['GET'])
+def get_course(course_id):
+    course = Course.get_course_by_id(course_id)
+    if not course:
+        return jsonify({'error': '课程不存在'}), 404
+    
+    return jsonify(course.to_dict())
+
+# 课程上传到阿里云OSS
+@bp.route('/upload_to_oss', methods=['POST'])
+def upload_to_oss():
+    user = get_user()
+    if not user:
+        return jsonify({'error': '用户未登录'}), 401
+    
+    if 'file' not in request.files:
+        return jsonify({'error': '未找到文件'}), 400
+    
+    file = request.files['file']
+    bucket = Config.bucket
+    bucket.put_object(f'/{education_level}/{subject}/{file.filename}', file)
+    
+    #写入数据库
+    name = request.form.get('name', '').strip()
+    education_level = request.form.get('education_level', '').strip()
+    subject = request.form.get('subject', '').strip()
+    
+    course = Course(name, education_level, subject, file.filename)
+    course.save()
+    
+    #添加表course_category
+    course_category = CourseCategory(education_level, subject)
+    course_category.save()
+
+    return jsonify({'message': '上传成功'})
+

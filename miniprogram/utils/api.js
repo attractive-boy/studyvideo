@@ -3,13 +3,16 @@ import {
 } from '../config/index';
 const request = (url, method, data) => {
   return new Promise((resolve, reject) => {
+    const header = { 'Content-Type': 'application/json' }
+    const token = wx.getStorageSync('token');
+    if (token) {
+      header.Authorization = token;
+    }
     wx.request({
       url: `${baseUrl}${url}`,
       method: method,
       data: data,
-      header: {
-        'Content-Type': 'application/json'
-      },
+      header: header,
       success: (res) => {
         if (res.statusCode === 200) {
           resolve(res.data);

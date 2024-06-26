@@ -9,6 +9,7 @@ class User(db.Model):
     session_key = db.Column(db.String(128), nullable=False)
     nickname = db.Column(db.String(128))
     avatar_url = db.Column(db.String(256))
+    role = db.Column(db.String(50), default='user')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -25,7 +26,8 @@ class User(db.Model):
             'nickname': self.nickname,
             'avatarUrl': self.avatar_url,
             'createdAt': self.created_at,
-            'updatedAt': self.updated_at
+            'updatedAt': self.updated_at,
+            'role': self.role,
         }
 
     def __repr__(self):
@@ -35,4 +37,5 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+    
     

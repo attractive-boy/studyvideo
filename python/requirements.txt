@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 oss2
 flask_migrate
+pyjwt

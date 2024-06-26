@@ -1,0 +1,77 @@
+.container {
+  padding: 20rpx;
+}
+
+.card {
+  margin-bottom: 20rpx;
+  width: 100%;
+  height: 50rpx;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.username {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.delete-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80rpx;
+  height: 100%;
+  background-color: #f5222d;
+  color: #fff;
+  font-size: 30rpx;
+}
+
+.picker {
+  padding: 20rpx;
+  background-color: rgb(82, 165, 243);
+  border-radius: 20rpx;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.picker{
+  position: absolute;
+  bottom: 0rpx;
+  width: 93%;
+  margin: 10rpx;
+  left: 0;
+}
+
+.btn-wrapper {
+  height: 100%;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 180rpx;
+  height: 100%;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #e34d59;
+}
+.t-cell{
+  width: 98vw !important;
+}

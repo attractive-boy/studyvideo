@@ -79,21 +79,13 @@ Page({
     })
   },
 
-  ListClickHandle(e) {
-    const {
-      index
-    } = e.detail;
-    const {
-      spuId
-    } = this.data.goodsList[index];
-    wx.navigateTo({
-      url: `/pages/goods/details/index?spuId=${spuId}`,
-    });
-  },
-
   navToSearchPage() {
+    wx.navigateTo({ url: "/pages/search/search" });
   },
-
+  navToDetail(e){
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({ url: `/pages/play/play?id=${id}` })
+  },
   subjectChangeHandle(e){
     const subject = e.detail.value
     this.getCourses(subject)

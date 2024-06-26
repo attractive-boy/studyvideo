@@ -1,0 +1,2 @@
+<!--pages/search/search.wxml-->
+<course-filter courses="{{courses}}" bind:cardtap="navToDetail"></course-filter>

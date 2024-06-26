@@ -1,0 +1,20 @@
+<view class="download-container">
+  <t-cell-group title="课程信息">
+    <t-cell title="课程名称">
+      <t-input slot="note" value="{{courseName}}" placeholder="请输入课程名称" change="handleInput" data-field="courseName" />
+    </t-cell>
+    <t-cell title="教育水平">
+      <t-input slot="note" value="{{educationLevel}}" placeholder="请输入教育水平" change="handleInput" data-field="educationLevel" />
+    </t-cell>
+    <t-cell title="科目">
+      <t-input slot="note" value="{{subject}}" placeholder="请输入科目" change="handleInput" data-field="subject" />
+    </t-cell>
+  </t-cell-group>
+
+  <view class="file-upload">
+    <t-button bind:tap="chooseFile">选择文件</t-button>
+    <view class="file-name">{{fileName}}</view>
+  </view>
+
+  <t-button bind:tap="uploadCourse" theme="primary" class="upload-btn">上传课程</t-button>
+</view>

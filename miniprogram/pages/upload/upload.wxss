@@ -1,0 +1,40 @@
+.download-container {
+  padding: 40rpx;
+  background-color: #f7f7f7;
+  min-height: 100vh;
+}
+
+t-cell-group {
+  margin-bottom: 40rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+t-cell {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+t-cell:last-child {
+  border-bottom: none;
+}
+
+.file-upload {
+  margin: 20rpx 0;
+  text-align: center;
+}
+
+.choose-file-btn {
+  display: inline-block;
+  margin-bottom: 10rpx;
+}
+
+.file-name {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.upload-btn {
+  width: 100% !important;
+  margin-top: 20rpx;
+}

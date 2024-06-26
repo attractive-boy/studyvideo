@@ -34,6 +34,9 @@ page {
 .home-page-header .swiper-wrap {
   margin-top: 20rpx;
 }
+.home-page-header .t-icon-search{
+  font-size: 36rpx !important;
+}
 
 .home-page-header .t-image__swiper {
   width: 100%;

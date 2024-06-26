@@ -1,0 +1,17 @@
+<view class="search">
+  <t-search 
+    t-class-input="t-search__input" 
+    t-class-input-container="t-search__input-container" 
+    placeholder="搜索" 
+    leftIcon="search"
+    bind:change="handleSearchInput" 
+  />
+</view>
+<view class="card-list">
+  <view wx:for="{{filteredCourses}}" wx:key="index" class="card-item" bind:tap="handleCardTap" data-id="{{item.id}}">
+    <image class="card-image" src="https://commonresource-1252524126.cdn.xiaoeknow.com/image/liye7aqe0yfc.png?imageMogr2/thumbnail/304x/quality/80|imageMogr2/ignore-error/1" mode="aspectFill" />
+    <view class="card-content">
+      <text class="card-title">{{item.name}}</text>
+    </view>
+  </view>
+</view>

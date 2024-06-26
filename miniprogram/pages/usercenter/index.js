@@ -1,5 +1,7 @@
 import Toast from 'tdesign-miniprogram/toast/index';
-
+import {
+  request
+} from '../../utils/api'
 const menuData = [
   [
     {
@@ -16,12 +18,6 @@ const menuData = [
     }
   ],
   [
-    {
-      title: '帮助中心',
-      tit: '',
-      url: '',
-      type: 'help-center',
-    },
     {
       title: '客服热线',
       tit: '',
@@ -40,7 +36,10 @@ const getDefaultData = () => ({
     phoneNumber: '',
   },
   menuData,
-  customerServiceInfo: {},
+  customerServiceInfo: {
+    serviceTimeDuration:"8：00 - 22：00",
+    servicePhone:"10086"
+  },
   currAuthStep: 1,
   showKefu: true,
   versionNo: '',
@@ -50,55 +49,76 @@ Page({
   data: getDefaultData(),
 
   onLoad() {
-    this.getVersionInfo();
+    this.fetchUserInfo()
   },
 
   onShow() {
-    this.getTabBar().init();
-    this.init();
+
   },
   onPullDownRefresh() {
-    this.init();
   },
-
-  init() {
+  fetchUserInfo() {
+    const that = this;
+    const token = wx.getStorageSync('token');
+    
+    if (token) {
+      request('/user/user', 'GET').then((result) => {
+        if (result.success) {
+          that.setData({ userInfo: result.data,currAuthStep:3});
+        } else {
+          console.log('获取用户信息失败：' + result.message);
+          wx.showToast({
+            title: '获取用户信息失败',
+            icon: 'none'
+          });
+        }
+      }).catch((err) => {
+        console.log('获取用户信息失败：', err);
+        wx.showToast({
+          title: '获取用户信息失败',
+          icon: 'none'
+        });
+      });
+    }
   },
-
+  checkAuth(){
+    return this.data.userInfo.role == "admin"
+  },
 
   onClickCell({ currentTarget }) {
     const { type } = currentTarget.dataset;
 
     switch (type) {
-      case 'address': {
-        wx.navigateTo({ url: '/pages/usercenter/address/list/index' });
+      case 'auth': {
+        if(this.checkAuth()){
+          wx.navigateTo({ url: "/pages/auth/auth" });
+        }else{
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '无权限',
+            icon: '',
+            duration: 1000,
+          });
+        }
         break;
       }
       case 'service': {
         this.openMakePhone();
         break;
       }
-      case 'help-center': {
-        Toast({
-          context: this,
-          selector: '#t-toast',
-          message: '你点击了帮助中心',
-          icon: '',
-          duration: 1000,
-        });
-        break;
-      }
-      case 'point': {
-        Toast({
-          context: this,
-          selector: '#t-toast',
-          message: '你点击了积分菜单',
-          icon: '',
-          duration: 1000,
-        });
-        break;
-      }
-      case 'coupon': {
-        wx.navigateTo({ url: '/pages/coupon/coupon-list/index' });
+      case 'upload':{
+        if(this.checkAuth()){
+          wx.navigateTo({ url: "/pages/upload/upload" });
+        }else{
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '无权限',
+            icon: '',
+            duration: 1000,
+          });
+        }
         break;
       }
       default: {
@@ -114,20 +134,6 @@ Page({
     }
   },
 
-  jumpNav(e) {
-    const status = e.detail.tabType;
-
-    if (status === 0) {
-      wx.navigateTo({ url: '/pages/order/after-service-list/index' });
-    } else {
-      wx.navigateTo({ url: `/pages/order/order-list/index?status=${status}` });
-    }
-  },
-
-  jumpAllOrder() {
-    wx.navigateTo({ url: '/pages/order/order-list/index' });
-  },
-
   openMakePhone() {
     this.setData({ showMakePhone: true });
   },
@@ -141,21 +147,7 @@ Page({
       phoneNumber: this.data.customerServiceInfo.servicePhone,
     });
   },
-
-  gotoUserEditPage() {
-    const { currAuthStep } = this.data;
-    if (currAuthStep === 2) {
-      wx.navigateTo({ url: '/pages/usercenter/person-info/index' });
-    } else {
-      this.fetUseriInfoHandle();
-    }
-  },
-
-  getVersionInfo() {
-    const versionInfo = wx.getAccountInfoSync();
-    const { version, envVersion = __wxConfig } = versionInfo.miniProgram;
-    this.setData({
-      versionNo: envVersion === 'release' ? version : envVersion,
-    });
-  },
+  handleUpdateUserInfo(event) {
+    this.fetchUserInfo()
+  }
 });

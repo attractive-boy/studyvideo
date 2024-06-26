@@ -1,11 +1,16 @@
 // pages/play/play.js
+
+import {
+  request
+} from '../../utils/api'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    course:"",
+    videoSrc:""
   },
   timer:null,
   /**
@@ -31,9 +36,33 @@ Page({
         }
       })
     }, 2000)
-    
+    this.getCouser(options.id)
   },
-
+  getCouser(id){
+    const that = this
+    request('/course/course/' + id, 'GET').then(res => {
+      // 修改页面标题
+      wx.setNavigationBarTitle({
+        title: res.name
+      })
+      that.setData({
+        course: res
+      })
+      that.getVideoSrc(res.oss_file_name)
+    })
+  },
+  videoErrorCallback(e) {
+    console.log('视频错误信息:')
+    console.log(e.detail.errMsg)
+  },
+  getVideoSrc(fileName) {
+    const that = this
+    request('/course/oss_file_url?file_key=' + fileName, 'GET').then(res => {
+      that.setData({
+        videoSrc: res.signed_url
+      })
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

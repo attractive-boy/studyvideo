@@ -4,10 +4,16 @@ Component({
     active: 0,
     list: TabMenu,
   },
+  lifetimes: {
+    attached() {
+    }
+  },
 
   methods: {
     onChange(event) {
-      this.setData({ active: event.detail.value });
+       this.toPage(event);
+    },
+    toPage(event){
       wx.switchTab({
         url: this.data.list[event.detail.value].url.startsWith('/')
           ? this.data.list[event.detail.value].url

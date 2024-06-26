@@ -1,0 +1,15 @@
+<view class="container">
+  <!-- 循环列表卡片展示头像和用户名 -->
+  <block wx:for="{{userList}}" wx:key="id">
+    <t-swipe-cell>
+      <t-cell t-class="t-cell" bordered="{{false}}" title="{{item.nickname}}" description="" note="左滑删除" image="{{item.avatarUrl}}" />
+      <view slot="right" class="btn delete-btn" bind:tap="onDelete" data-id="{{item.id}}">删除</view>
+    </t-swipe-cell>
+  </block>
+
+
+    <!-- 用户选择器 -->
+    <picker mode="selector" range="{{allUsers}}" range-key="nickname" bindchange="handleSelectUser">
+      <view class="picker">新增用户</view>
+    </picker>
+</view>

@@ -116,6 +116,7 @@ page {
 }
 .popup-content .popup-phone.online {
   margin-bottom: 20rpx;
+  width: 100%;
 }
 .popup-content .popup-phone.online::after {
   content: none;

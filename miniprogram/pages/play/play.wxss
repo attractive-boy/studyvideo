@@ -1,1 +1,18 @@
 /* pages/play/play.wxss */
+.play-container {
+  height: 100vh;
+  background-color: #f7f7f7;
+}
+
+.video {
+  width: 100vw;
+}
+.custom-tabs {
+  margin-bottom: 32rpx;
+}
+.introduct{
+  font-size: 40rpx;
+  margin: 50rpx 0rpx 0 40rpx;
+  padding-bottom: 50rpx;
+  display: block;
+}
