@@ -68,7 +68,7 @@ def get_user():
         return jsonify({'success': False, 'message': '缺少 token 参数'}), 400
     
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
         user_id = payload['openId']
         user = User.query.filter_by(open_id=user_id).first()
         if user is None:
@@ -86,7 +86,7 @@ def get_course_users(course_id):
         return jsonify({'success': False, 'message': '缺少 token 参数'}), 400
     
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
 
         course = Course.query.get(course_id)
         if course is None:
@@ -108,7 +108,7 @@ def get_unauthorized_users(course_id):
         return jsonify({'success': False, 'message': '缺少 token 参数'}), 400
     
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
         user_id = payload['openId']
         course = Course.query.get(course_id)
         if course is None:
@@ -131,7 +131,7 @@ def add_user_to_course(course_id, user_id):
         return jsonify({'success': False, 'message': '缺少 token 参数'}), 400
     
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
         course = Course.query.get(course_id)
         if course is None:
             return jsonify({'success': False, 'message': '课程不存在'}), 404
@@ -153,7 +153,7 @@ def remove_user_from_course(course_id, user_id):
         return jsonify({'success': False, 'message': '缺少 token 参数'}), 400
     
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
         course = Course.query.get(course_id)
         if course is None:
             return jsonify({'success': False, 'message': '课程不存在'}), 404

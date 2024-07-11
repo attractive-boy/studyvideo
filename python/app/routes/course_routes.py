@@ -70,7 +70,7 @@ def get_courses_by_education_level_and_subject():
     # courses = Course.get_all_courses_by_education_level_and_subject(education_level, subject)
     #只获取被授权的
     token = request.headers.get('Authorization')
-    payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
     user_id = payload['openId']
     user = User.query.filter_by(open_id=user_id).first()
     if not user:
@@ -86,7 +86,7 @@ def get_courses_by_education_level_and_subject():
 def get_authorized_courses():
     # 根据token 获取唯一id
     token = request.headers.get('Authorization')
-    payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+    payload = jwt.decode(token.encode('utf-8'), SECRET_KEY, algorithms=['HS256'])
     user_id = payload['openId']
     user = User.query.filter_by(open_id=user_id).first()
     if not user:

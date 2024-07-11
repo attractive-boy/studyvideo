@@ -43,6 +43,9 @@ const getDefaultData = () => ({
   currAuthStep: 1,
   showKefu: true,
   versionNo: '',
+  defaultAvatarUrl:
+      'https://cdn-we-retail.ym.tencent.com/miniapp/usercenter/icon-user-center-avatar@2x.png',
+  AuthStepType : '',
 });
 
 Page({
@@ -64,7 +67,7 @@ Page({
     if (token) {
       request('/user/user', 'GET').then((result) => {
         if (result.success) {
-          that.setData({ userInfo: result.data,currAuthStep:3});
+          that.setData({ userInfo: result.data, currAuthStep:3});
         } else {
           console.log('获取用户信息失败：' + result.message);
           wx.showToast({
@@ -149,5 +152,10 @@ Page({
   },
   handleUpdateUserInfo(event) {
     this.fetchUserInfo()
+  },
+  gotoUserEditPage(){
+    wx.navigateTo({
+      url: '/pages/login/login',
+    })
   }
 });

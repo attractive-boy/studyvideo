@@ -1,35 +1,28 @@
 import TabMenu from './data';
 Component({
   data: {
-    active: 0,
+    active: -1,
     list: TabMenu,
   },
   lifetimes: {
     attached() {
+      
     }
   },
 
   methods: {
     onChange(event) {
-       this.toPage(event);
+      console.log(event)
+      this.toPage(event);
     },
     toPage(event){
-      wx.switchTab({
-        url: this.data.list[event.detail.value].url.startsWith('/')
-          ? this.data.list[event.detail.value].url
-          : `/${this.data.list[event.detail.value].url}`,
+      const { value } = event.detail;
+      const targetUrl = `/${this.data.list[value].url}`;
+      this.setData({ active: value },()=>{
+        wx.switchTab({
+          url: targetUrl,
+        })
       });
-    },
-
-    init() {
-      const page = getCurrentPages().pop();
-      const route = page ? page.route.split('?')[0] : '';
-      const active = this.data.list.findIndex(
-        (item) =>
-          (item.url.startsWith('/') ? item.url.substr(1) : item.url) ===
-          `${route}`,
-      );
-      this.setData({ active });
     },
   },
 });

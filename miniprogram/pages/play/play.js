@@ -21,13 +21,14 @@ Page({
       wx.getScreenRecordingState({
         success: function (res) {
           if (res.state == "on") {
-            uni.showModal({
-              content: "此页面不允许录屏!",
+            wx.showModal({
+              title: '提示',
+              content: '此页面不允许录屏!',
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  uni.switchTab({
-                    url: "/pages/home/home"
+                  wx.switchTab({
+                    url: '/pages/home/home'
                   })
                 }
               }
