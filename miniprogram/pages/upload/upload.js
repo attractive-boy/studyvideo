@@ -17,7 +17,7 @@ Page({
   chooseFile() {
     wx.chooseMessageFile({
       count: 1,
-      type: 'file',
+      type: 'video',
       success: (res) => {
         const file = res.tempFiles[0];
         this.setData({

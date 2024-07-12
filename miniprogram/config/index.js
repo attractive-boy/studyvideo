@@ -1,1 +1,1 @@
-export const baseUrl = 'https://www.wenshuaiyun.ltd:2000/api';
+export const baseUrl = 'https://www.wenshuaiyun.ltd/api';
