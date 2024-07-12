@@ -15,15 +15,18 @@ Page({
   },
 
   chooseFile() {
+    const that = this
     wx.chooseMessageFile({
       count: 1,
       type: 'video',
       success: (res) => {
+        console.log(res)
         const file = res.tempFiles[0];
-        this.setData({
+        that.setData({
           fileName: file.name,
           filePath: file.path
         });
+        
       },
       fail: (err) => {
         console.error('文件选择失败', err);
