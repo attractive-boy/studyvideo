@@ -1,2 +1,2 @@
 <!--pages/auth/auth.wxml-->
-<course-filter courses="{{courses}}" bind:cardtap="navToAuth"></course-filter>
+<course-filter courses="{{showlist}}" bind:cardtap="navToAuth"></course-filter>

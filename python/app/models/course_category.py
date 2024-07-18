@@ -20,3 +20,9 @@ class CourseCategory(db.Model):
     @staticmethod
     def get_all_subject_by_education_level(education_level): 
         return CourseCategory.query.with_entities(CourseCategory.subject).filter_by(education_level=education_level).distinct()
+    
+    def save(self):
+        # 将实例添加到会话
+        db.session.add(self)
+        # 提交会话以保存更改
+        db.session.commit()

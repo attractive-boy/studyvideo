@@ -54,8 +54,7 @@ def login():
 def generate_token(user_info):
     payload = {
         'openId': user_info['openId'],
-        'nickname': user_info['nickname'],
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)  # token 24小时后过期
+        'nickname': user_info['nickname']
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     return token

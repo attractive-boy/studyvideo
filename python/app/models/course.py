@@ -93,3 +93,14 @@ class Course(db.Model):
         # 执行查询并转换每个User实例为字典
         authorized_users_list = [user.to_dict() for user in authorized_users_query.all()]
         return authorized_users_list
+    def save(self):
+        # 将实例添加到会话
+        db.session.add(self)
+        # 提交会话以保存更改
+        db.session.commit()
+        
+    def delete(self):
+        # 删除课程前，先处理相关的授权关系
+        self.authorized_users.clear()  # 清除与用户的关联
+        db.session.delete(self)  # 删除课程
+        db.session.commit()  # 提交更改

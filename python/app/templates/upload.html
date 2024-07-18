@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>课程文件夹上传</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">上传课程文件夹</h2>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="fileInput">选择ZIP文件</label>
+                <input type="file" id="fileInput" class="form-control" accept=".zip" required>
+            </div>
+            <button type="submit" id="uploadButton" class="btn btn-primary btn-block">上传</button>
+        </form>
+        <div id="uploadMessage" class="mt-3"></div>
+        <div id="loadingMessage" class="mt-3" style="display: none;">上传中，请稍候...</div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('fileInput');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const uploadButton = document.getElementById('uploadButton');
+            const loadingMessage = document.getElementById('loadingMessage');
+
+            // 禁用按钮并显示加载信息
+            uploadButton.disabled = true;
+            loadingMessage.style.display = 'block';
+
+            const controller = new AbortController();
+            const signal = controller.signal;
+
+            // 设置一个超时函数
+            const timeoutId = setTimeout(() => controller.abort(), 86400000);  // 86400000 ms = 24 hours
+
+            try {
+                const response = await fetch('/api/course/upload_folder_to_oss', {
+                    method: 'POST',
+                    body: formData,
+                    signal: signal
+                });
+                clearTimeout(timeoutId);  // 成功响应后清除超时
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('uploadMessage').innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                } else {
+                    document.getElementById('uploadMessage').innerHTML = `<div class="alert alert-danger">${result.error}</div>`;
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    document.getElementById('uploadMessage').innerHTML = `<div class="alert alert-danger">上传超时，请重试。</div>`;
+                } else {
+                    document.getElementById('uploadMessage').innerHTML = `<div class="alert alert-danger">上传失败: ${error.message}</div>`;
+                }
+            } finally {
+                // 恢复按钮和隐藏加载信息
+                uploadButton.disabled = false;
+                loadingMessage.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
