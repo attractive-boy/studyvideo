@@ -44,35 +44,26 @@ Page({
       });
       return;
     }
-
-    wx.showLoading({
-      title: '上传中...',
-      mask: true
-    });
-
-    const { baseUrl } = require('../../config/index');
+    const { baseUrl } = require('../../config/index')
     wx.uploadFile({
       url: `${baseUrl}/course/upload_to_oss`,
       filePath: filePath,
       name: 'file',
-      timeout:9000000,
       formData: {
         name: courseName,
         education_level: educationLevel,
         subject: subject
       },
       success: (res) => {
-        wx.hideLoading();
         wx.showToast({
           title: '上传成功',
           icon: 'success'
         });
       },
       fail: (err) => {
-        wx.hideLoading();
         wx.showToast({
-          title: '上传成功',
-          icon: 'success'
+          title: '上传失败',
+          icon: 'none'
         });
         console.error('文件上传失败', err);
       }

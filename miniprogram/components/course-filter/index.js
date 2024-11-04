@@ -36,8 +36,8 @@ Component({
       this.setData({ filteredCourses });
     },
     handleCardTap(event) {
-      const { id, name} = event.currentTarget.dataset;
-      this.triggerEvent('cardtap', { id,name });
+      const { id } = event.currentTarget.dataset;
+      this.triggerEvent('cardtap', { id });
     }
   }
 });

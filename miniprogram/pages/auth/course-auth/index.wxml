@@ -7,30 +7,9 @@
     </t-swipe-cell>
   </block>
 
-    <t-picker
-    visible="{{visible}}"
-    value="{{selectUser}}"
-    title="选择用户"
-    cancelBtn="取消"
-    confirmBtn="确认"
-    usingCustomNavbar
-    bindchange="onPickerChange"
-    bindpick="onColumnChange"
-    bindcancel="onPickerCancel"
-  >
-  <t-search 
-    slot="header"
-    placeholder="搜索" 
-    leftIcon="search"
-    bind:change="onSearchInput" 
-    />
-    <t-picker-item options="{{filteredUsers}}" />
-  </t-picker>
-  <!-- 用户选择器 -->
-  <view class="button-example">
-    <t-button theme="primary" size="large" block bind:tap="onPicker" t-class="add-user-btn">新增用户</t-button>
-    <view style="height: 20rpx;"></view>
-    <t-button theme="danger" size="large" block bind:tap="handleDeleteCourse" t-class="add-user-btn">删除课程</t-button>
-  </view>
 
+    <!-- 用户选择器 -->
+    <picker mode="selector" range="{{allUsers}}" range-key="nickname" bindchange="handleSelectUser">
+      <view class="picker">新增用户</view>
+    </picker>
 </view>
